@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:qr_reader/providers/providers.dart';
-
 import 'package:qr_reader/screens/screens.dart';
 import 'package:qr_reader/widgets/widgets.dart';
+
+import 'package:qr_reader/providers/providers.dart';
+
+import 'package:qr_reader/models/scan_model.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -39,7 +41,9 @@ class _HomePageBody extends StatelessWidget {
     final int currentIndex = uiProvider.selectedMenuOpt;
 
     // TODO: Temporal leer DB
-    DBProvider.db.database;
+    final tempScan = ScanModel(value: 'https://mappedev.vercel.app/');
+    DBProvider.db.getScansByType('http').then((scans) => print('SCANS TYPE HTTP::: ${scans.isNotEmpty ? scans : 'No hay'}'));
+    DBProvider.db.getScansByType('geo').then((scans) => print('SCANS TYPE GEO::: ${scans.isNotEmpty ? scans : 'No hay'}'));
 
     switch(currentIndex) {
       case 0:

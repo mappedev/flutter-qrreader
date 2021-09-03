@@ -24,8 +24,8 @@ class ScanModel {
 
   Map<String, dynamic> toMap() => {
         'id': id,
-        'type': type,
-        'vaue': value,
+        'tipo': type,
+        'valor': value,
       };
 }
 

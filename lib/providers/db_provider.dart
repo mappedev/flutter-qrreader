@@ -4,9 +4,12 @@ import 'package:path_provider/path_provider.dart'
     show getApplicationDocumentsDirectory;
 import 'package:path/path.dart' show join;
 
+import 'package:qr_reader/models/models.dart' show ScanModel;
+
 class DBProvider {
   static final _dbName = 'ScansDB.db';
   static final _dbVersion = 1;
+  static final _dbTableName = 'Scans';
 
   DBProvider._();
 
@@ -31,13 +34,14 @@ class DBProvider {
 
     print('path $path');
 
+    // Creación de la DB
     return await openDatabase(
       path,
       // Se recomienda indicar versión para que cuando la versión aumente se vuelva ejecutar el onCreate (creación)
-      version: _dbVersion, 
+      version: _dbVersion,
       onCreate: (Database db, int version) async {
         await db.execute('''
-          CREATE TABLE Scans(
+          CREATE TABLE '$_dbTableName'(
             id INTEGER PRIMARY KEY,
             tipo TEXT,
             valor TEXT
@@ -46,4 +50,62 @@ class DBProvider {
       },
     );
   }
+
+  // Forma larga de realizar un INSERT en una tabla
+  //Future<int> newScanRaw(ScanModel newScan) async {
+  //final id = newScan.id;
+  //final type = newScan.type;
+  //final value = newScan.value;
+
+  //// Verificar la DB
+  //final db = await database;
+  //final res = await db.rawInsert('''
+  //INSERT INTO Scans(id, tipo, valor)
+  //VALUES($id, $type, $value)
+  //''');
+  //return res;
+  //}
+
+  // CREATE
+  // Forma corta de realizar un INSERT en una tabla
+  // También es la forma más seguro porque impide inyecciones de SQL
+  Future<int> newScan(ScanModel newScan) async {
+    final db = await database;
+    final res = await db.insert(_dbTableName, newScan.toMap());
+    print('RES::: $res');
+    // 'res' es el id del último registro insertado
+    return res;
+  }
+
+  // READ
+  Future<ScanModel?> getScanById(int id) async {
+    final db = await database;
+    final res = await db.query(_dbTableName, where: 'id = ?', whereArgs: [id]);
+    return res.isNotEmpty ? ScanModel.fromMap(res.first) : null;
+  }
+
+  Future<List<ScanModel>> getScansByType(String type) async {
+    final db = await database;
+    //final res = await db.query(_dbTableName, where: 'tipo = ?', whereArgs: [type]);
+    final res = await db.rawQuery('''
+      SELECT * FROM '$_dbTableName' WHERE tipo = '$type'
+    ''');
+    return res.isNotEmpty
+        ? res.map((row) => ScanModel.fromMap(row)).toList()
+        : [];
+  }
+
+  Future<List<ScanModel>> getAllScans() async {
+    final db = await database;
+    final res = await db.query(_dbTableName);
+    return res.isNotEmpty
+        ? res.map((row) => ScanModel.fromMap(row)).toList()
+        : [];
+  }
+
+  // UPDATE
+  //Future<ScanModel> updateScanByid(int id) async {
+    //final db = await database;
+    //final res = await db.update(table, values)
+  //}
 }
