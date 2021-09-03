@@ -4,7 +4,7 @@ import 'package:path_provider/path_provider.dart'
     show getApplicationDocumentsDirectory;
 import 'package:path/path.dart' show join;
 
-import 'package:qr_reader/models/models.dart' show ScanModel;
+import 'package:qr_reader/models/scan_model.dart';
 
 class DBProvider {
   static final _dbName = 'ScansDB.db';

@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:qr_reader/screens/screens.dart';
-import 'package:qr_reader/widgets/widgets.dart';
+import 'package:qr_reader/screens/directions_fragment.dart';
+import 'package:qr_reader/screens/maps_fragment.dart';
+import 'package:qr_reader/widgets/custom_navigation_bar.dart';
+import 'package:qr_reader/widgets/scan_button.dart';
 
-import 'package:qr_reader/providers/providers.dart';
-
+import 'package:qr_reader/providers/db_provider.dart';
+import 'package:qr_reader/providers/ui_provider.dart';
 import 'package:qr_reader/models/scan_model.dart';
 
 class HomeScreen extends StatelessWidget {

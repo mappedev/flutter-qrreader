@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:qr_reader/providers/providers.dart';
+import 'package:qr_reader/screens/home_screen.dart';
+import 'package:qr_reader/screens/map_screen.dart';
 
-import 'package:qr_reader/screens/screens.dart';
+import 'package:qr_reader/providers/ui_provider.dart';
 
 void main() => runApp(MyApp());
 
