@@ -32,8 +32,6 @@ class DBProvider {
         await getApplicationDocumentsDirectory();
     final path = join(documentsDirectory.path, _dbName);
 
-    print('path $path');
-
     // Creación de la DB
     return await openDatabase(
       path,
@@ -72,7 +70,6 @@ class DBProvider {
   Future<int> newScan(ScanModel newScan) async {
     final db = await database;
     final res = await db.insert(_dbTableName, newScan.toMap());
-    print('RES::: $res');
     // 'res' es el id del último registro insertado
     return res;
   }
@@ -104,8 +101,30 @@ class DBProvider {
   }
 
   // UPDATE
-  //Future<ScanModel> updateScanByid(int id) async {
-    //final db = await database;
-    //final res = await db.update(table, values)
-  //}
+  Future<int> updateScan(ScanModel newScan) async {
+    final db = await database;
+    // Es importante indicar el where, de resto actualizará todos los registros de la DB
+    final res = await db.update(_dbTableName, newScan.toMap(),
+        where: 'id = ?', whereArgs: [newScan.id]);
+    return res;
+  }
+
+  // DELETE
+  Future<int> deleteScan(int id) async {
+    final db = await database;
+    final res = await db.delete(_dbTableName, where: 'id = ?', whereArgs: [id]);
+    //final res = await db.rawDelete('''
+    //DELETE FROM '$_dbTableName' WHERE id = '$id'
+    //''');
+    return res;
+  }
+
+  Future<int> deleteAllScans() async {
+    final db = await database;
+    final res = await db.delete(_dbTableName);
+    //final res = await db.rawDelete('''
+    //DELETE FROM '$_dbTableName'
+    //''');
+    return res;
+  }
 }

@@ -3,6 +3,9 @@
    <application
         android:label="qr_reader"
         android:icon="@mipmap/ic_launcher">
+        <!-- API key Google Map -->
+        <meta-data android:name="com.google.android.geo.API_KEY"
+          android:value="AIzaSyDge5TPnnE29FB-1nnG80KU0rsMopo-B9A"/>
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
